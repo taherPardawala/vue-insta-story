@@ -1,7 +1,14 @@
 <template>
 	<div class="home">
-		<Track :stories="stories" :currentIndex="currentIndex" />
-		<story :stories="stories" :currentIndex="currentIndex" />
+		<!-- <button @click="show = !show">CLICK</button> -->
+		<Track v-if="show" @nextSlide="nextSlide" :stories="stories" :currentIndex="currentIndex" />
+		<story
+			v-if="show"
+			@nextSlide="nextSlide"
+			@previousSlide="previousSlide"
+			:stories="stories"
+			:currentIndex="currentIndex"
+		/>
 	</div>
 </template>
 
@@ -15,21 +22,50 @@
 		data: () => {
 			return {
 				stories: [
-					"https://i.imgur.com/T4jwXEX.png",
-					"https://i.imgur.com/AY5z4ZP.jpg",
-					"https://i.imgur.com/HJBbtOI.jpg",
-					"https://i.imgur.com/tXgQukC.jpg"
+					{
+						mediaURL: "https://i.imgur.com/T4jwXEX.png",
+						type: "image",
+						duration: 2000
+					},
+					{
+						mediaURL: "https://i.imgur.com/AY5z4ZP.jpg",
+						type: "image",
+						duration: 2000
+					},
+					{
+						mediaURL: "https://i.imgur.com/HJBbtOI.jpg",
+						type: "image",
+						duration: 2000
+					},
+					{
+						mediaURL: "https://i.imgur.com/tXgQukC.jpg",
+						type: "image",
+						duration: 2000
+					},
+					{
+						mediaURL: require("../assets/coverr-soap-bubbles-outdoor-1567244523991.mp4"),
+						type: "video",
+						duration: 28000
+					}
 				],
-				currentIndex: 0
+				currentIndex: 0,
+				show: true
 			};
 		},
-		mounted() {
-			setInterval(_ => {
-				this.currentIndex++;
-				if (this.currentIndex === this.stories.length) {
+		mounted() {},
+		methods: {
+			nextSlide() {
+				if (this.currentIndex === this.stories.length - 1) {
 					this.currentIndex = 0;
+				} else {
+					this.currentIndex++;
 				}
-			}, 1000);
+			},
+			previousSlide() {
+				if (this.currentIndex !== 0) {
+					this.currentIndex--;
+				}
+			}
 		},
 		components: {
 			Story,
@@ -37,3 +73,13 @@
 		}
 	};
 </script>
+
+<style lang="scss" scoped>
+	.home {
+		max-width: 320px;
+		.track-wrapper {
+			position: absolute;
+			top: 2%;
+		}
+	}
+</style>
